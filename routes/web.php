@@ -14,4 +14,6 @@
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('tickets', 'TicketController@index');
     $router->post('tickets', 'TicketController@store');
+    $router->get('tickets/{ticket_id}','TicketController@show');
+    $router->put('tickets/{ticket_id}','TicketController@update');
 });

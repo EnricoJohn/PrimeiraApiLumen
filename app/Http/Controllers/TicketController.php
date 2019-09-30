@@ -17,12 +17,14 @@ class TicketController extends Controller
         
     }
 
-    public function index() {
+    public function index() 
+    {
         return Ticket::get();
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         return response()
             ->json(Ticket::create([
@@ -35,6 +37,39 @@ class TicketController extends Controller
                 'status'        => $request->status, 
             ]),
              201);
+    }
 
+    public function show(int $ticket_id)
+    {
+        $ticket = Ticket::find($ticket_id);
+
+        if (is_null($ticket)) {
+            return response()->json('', 204);
+        }
+        return response()->json($ticket, 200);
+    }
+
+    public function update(int $ticket_id, Request $req)
+    {
+        $ticket = Ticket::find($ticket_id);
+        if (is_null($ticket)) {
+            return response()->json(['erro' => 'Recurso não encontrado'],
+                                     204);
+        }
+
+        $ticket->fill($req->all());
+        $ticket->save();
+    }
+
+    public function destroy(int $id)
+    {
+        $qtdRecursosRemovidos = Serie::destroy($id);
+        if ($qtdRecursosRemovidos === 0) {
+            return response()->json([
+                'erro' => 'Recurso não encontrado'
+            ], 404);
+        }
+
+        return response()->json('', 204);
     }
 }
